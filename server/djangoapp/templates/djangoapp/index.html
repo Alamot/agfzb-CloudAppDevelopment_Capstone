@@ -52,6 +52,20 @@
 
 
     <!--Add a dealer table here -->
+    {% if dealerships %}
+       <ul>
+       {% for dealership in dealerships %}
+           <div class="container">
+              <div class="row">{{ dealership.full_name }}</div>
+           </div>
+           <hr>
+       {% endfor %}
+       </ul>
+    {% else %}
+    <p>No dealers are available.</p>
+    {% endif %}
+
+
 
     </body>
 
