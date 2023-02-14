@@ -10,10 +10,9 @@
     <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
 </head>
 
-    <body>
+<body>
     <!--Add a nav bar here -->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
@@ -49,24 +48,40 @@
         </div>
     </nav>
 
-
-
     <!--Add a dealer table here -->
     {% if dealerships %}
-       <ul>
-       {% for dealership in dealerships %}
-           <div class="container">
-              <div class="row">{{ dealership.full_name }}</div>
-           </div>
-           <hr>
-       {% endfor %}
-       </ul>
+      <table id="table" class="table table-hover table-striped" data-filter-control="true">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Dealer Name</th>
+            <th scope="col">City</th>
+            <th scope="col">Address</th>
+            <th scope="col">Zip</th>
+            <th scope="col" data-field="state" data-filter-control="select">State</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dealer in dealerships %}
+          <tr>
+            <td>{{dealer.id}}</td>
+            <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+            <td>{{dealer.city}}</td>
+            <td>{{dealer.address}}</td>
+            <td>{{dealer.zip}}</td>
+            <td>{{dealer.city}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     {% else %}
     <p>No dealers are available.</p>
     {% endif %}
 
-
-
-    </body>
-
+</body>
+<script>
+  $(function() {
+    $('#table').bootstrapTable()
+  })
+</script>
 </html>
