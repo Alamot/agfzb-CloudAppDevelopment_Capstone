@@ -3,6 +3,7 @@ import json
 import requests
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
+from functools import lru_cache
 
 
 # Create a `get_request` to make HTTP GET requests
@@ -42,6 +43,7 @@ def post_request(url,json_payload, **kwargs):
 # def get_dealers_from_cf(url, **kwargs):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a CarDealer object list
+@lru_cache(maxsize=None)
 def get_dealers_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
@@ -97,9 +99,9 @@ def get_dealer_reviews_from_cf(url, dealerId):
         for review in reviews:
             # Create a DealerReview object with values in `doc` object
             review_obj = DealerReview(dealership=review["dealership"], name=review["name"], purchase=review["purchase"],
-                                      review=review["review"], purchase_date=review["purchase_date"],
+                                      review=review["review"], purchase_date=review["purchase_date"] if "purchase_date" in review else '',
                                       car_make=review["car_make"], car_model=review["car_model"],
-                                      car_year=review["car_year"], id=review["id"])
+                                      car_year=review["car_year"], id=review["id"] if "id" in review else '')
             review_obj.sentiment = analyze_review_sentiments(review_obj.review)
             results.append(review_obj)
     return results
